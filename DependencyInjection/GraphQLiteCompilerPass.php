@@ -28,6 +28,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use function ini_get;
 use function interface_exists;
+use function method_exists;
 use function strpos;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -194,7 +195,7 @@ class GraphQLiteCompilerPass implements CompilerPassInterface
         }
 
         // Let's register the mapping with UserInterface if UserInterface is available.
-        if (interface_exists(UserInterface::class)) {
+        if ((!$disableLogin || !$disableMe) && interface_exists(UserInterface::class)) {
             $staticTypes = $container->getDefinition(StaticClassListTypeMapperFactory::class)->getArgument(0);
             if (!is_array($staticTypes)){
                 throw new GraphQLException(sprintf('Expecting array in %s, arg #1', StaticClassListTypeMapperFactory::class));
@@ -429,7 +430,9 @@ class GraphQLiteCompilerPass implements CompilerPassInterface
     private function getAnnotationReader(): AnnotationReader
     {
         if ($this->annotationReader === null) {
-            AnnotationRegistry::registerLoader('class_exists');
+            if (method_exists(AnnotationRegistry::class, 'registerLoader')) { /** @phpstan-ignore-line */
+                AnnotationRegistry::registerLoader('class_exists');
+            }
 
             $doctrineAnnotationReader = new DoctrineAnnotationReader();
 

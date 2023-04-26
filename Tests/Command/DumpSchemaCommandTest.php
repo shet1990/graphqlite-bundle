@@ -18,7 +18,7 @@ class DumpSchemaCommandTest extends TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
 
-        self::assertMatchesRegularExpression(
+        self::assertRegExp(
             '/type Product {[\s"]*seller: Contact\s*name: String!\s*price: Float!\s*}/',
             $commandTester->getDisplay()
         );

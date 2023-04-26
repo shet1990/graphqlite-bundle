@@ -16,7 +16,7 @@ class MyException extends \Exception implements ClientAware
      *
      * @api
      */
-    public function isClientSafe()
+    public function isClientSafe(): bool
     {
         return true;
     }

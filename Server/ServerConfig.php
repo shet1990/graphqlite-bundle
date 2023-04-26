@@ -20,11 +20,11 @@ class ServerConfig extends \GraphQL\Server\ServerConfig
      *
      * @param ValidationRule[]|callable $validationRules
      *
-     * @return \GraphQL\Server\ServerConfig
+     * @return self
      *
      * @api
      */
-    public function setValidationRules($validationRules)
+    public function setValidationRules($validationRules): self
     {
         parent::setValidationRules(
             function (OperationParams $params, DocumentNode $doc, string $operationType) use ($validationRules): array {
